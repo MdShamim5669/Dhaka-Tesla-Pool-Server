@@ -268,7 +268,7 @@ export class PoolsService {
         throw new AppError(404, ERROR_CODES.NOT_FOUND, 'Pool not found');
       }
 
-      if (pool.status !== 'DRIVER_ARRIVED') {
+      if (pool.status !== 'DRIVER_ARRIVED' && pool.status !== 'ACCEPTED') {
         throw new AppError(409, ERROR_CODES.INVALID_STATE_TRANSITION, `Cannot start trip with status ${pool.status}`);
       }
 
@@ -293,7 +293,7 @@ export class PoolsService {
           data: {
             rideRequestId: ride.id,
             poolId,
-            fromStatus: 'DRIVER_ARRIVED',
+            fromStatus: (ride.status as any) || 'DRIVER_ARRIVED',
             toStatus: 'STARTED',
             actorUserId: driverUserId,
             reason: `Trip started (Fare locked: ${fare.totalFarePaisa} paisa, pooled: ${isPooled})`,
