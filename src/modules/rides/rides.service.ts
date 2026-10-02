@@ -196,9 +196,13 @@ export class RidesService {
           include: {
             pool: {
               include: {
-                driver: {
+                tesla: {
                   include: {
-                    user: { select: { name: true, phone: true } },
+                    driver: {
+                      include: {
+                        user: { select: { name: true, phone: true } },
+                      },
+                    },
                   },
                 },
               },
@@ -212,7 +216,7 @@ export class RidesService {
       throw new AppError(404, ERROR_CODES.NOT_FOUND, 'Ride not found');
     }
 
-    const driver = ride.poolMember?.pool?.driver;
+    const driver = ride.poolMember?.pool?.tesla?.driver;
 
     return {
       rideId: ride.id,
