@@ -1,0 +1,14 @@
+model Driver {
+  userId             String    @id @map("user_id") @db.Uuid
+  isOnline           Boolean   @default(false) @map("is_online")
+  currentLat         Float?    @map("current_lat")
+  currentLng         Float?    @map("current_lng")
+  heading            Float?    @map("heading")
+  lastLocationUpdate DateTime? @map("last_location_update")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tesla              Tesla?
+
+  @@map("drivers")
+}

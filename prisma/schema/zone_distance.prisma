@@ -1,0 +1,11 @@
+model ZoneDistance {
+  fromZoneId Int @map("from_zone_id") @db.SmallInt
+  toZoneId   Int @map("to_zone_id") @db.SmallInt
+  distanceM  Int @map("distance_m")
+
+  fromZone Zone @relation("FromZone", fields: [fromZoneId], references: [id], onDelete: Cascade)
+  toZone   Zone @relation("ToZone", fields: [toZoneId], references: [id], onDelete: Cascade)
+
+  @@id([fromZoneId, toZoneId])
+  @@map("zone_distances")
+}

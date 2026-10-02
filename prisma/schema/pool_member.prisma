@@ -1,0 +1,14 @@
+model PoolMember {
+  id            String      @id @default(uuid()) @db.Uuid
+  poolId        String      @map("pool_id") @db.Uuid
+  rideRequestId String      @unique @map("ride_request_id") @db.Uuid
+  seats         Int         @db.SmallInt
+  joinedAt      DateTime    @default(now()) @map("joined_at")
+  leftAt        DateTime?   @map("left_at")
+
+  pool          Pool        @relation(fields: [poolId], references: [id], onDelete: Cascade)
+  rideRequest   RideRequest @relation(fields: [rideRequestId], references: [id], onDelete: Cascade)
+
+  @@index([poolId])
+  @@map("pool_members")
+}

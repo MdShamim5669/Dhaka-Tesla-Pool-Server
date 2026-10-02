@@ -1,0 +1,26 @@
+model Wallet {
+  userId       String   @id @map("user_id") @db.Uuid
+  balancePaisa Int      @default(0) @map("balance_paisa")
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wallets")
+}
+
+model WalletTransaction {
+  id              String                  @id @default(uuid()) @db.Uuid
+  tranId          String                  @unique @map("tran_id")
+  valId           String?                 @map("val_id")
+  bankTranId      String?                 @map("bank_tran_id")
+  userId          String                  @map("user_id") @db.Uuid
+  amountPaisa     Int                     @map("amount_paisa")
+  status          WalletTransactionStatus @default(PENDING)
+  gatewayResponse Json?                   @map("gateway_response")
+  createdAt       DateTime                @default(now()) @map("created_at")
+  updatedAt       DateTime                @updatedAt @map("updated_at")
+
+  user            User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wallet_transactions")
+}
+

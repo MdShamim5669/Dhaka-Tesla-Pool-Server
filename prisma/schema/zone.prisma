@@ -1,0 +1,15 @@
+model Zone {
+  id       Int     @id @default(autoincrement()) @db.SmallInt
+  name     String  @unique
+  lat      Decimal @db.Decimal(9, 6)
+  lng      Decimal @db.Decimal(9, 6)
+  corridor String
+
+  pickupRequests   RideRequest[]   @relation("PickupZone")
+  destRequests     RideRequest[]   @relation("DestZone")
+  anchorPools      Pool[]          @relation("PoolAnchorZone")
+  distancesFrom    ZoneDistance[]  @relation("FromZone")
+  distancesTo      ZoneDistance[]  @relation("ToZone")
+
+  @@map("zones")
+}

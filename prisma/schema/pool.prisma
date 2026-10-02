@@ -1,0 +1,20 @@
+model Pool {
+  id            String              @id @default(uuid()) @db.Uuid
+  teslaId       String              @map("tesla_id") @db.Uuid
+  status        PoolStatus          @default(ACCEPTED)
+  pickupZoneId  Int                 @map("pickup_zone_id") @db.SmallInt
+  corridor      String
+  seatsOccupied Int                 @default(0) @map("seats_occupied") @db.SmallInt
+  capacity      Int                 @db.SmallInt
+  startedAt     DateTime?           @map("started_at")
+  completedAt   DateTime?           @map("completed_at")
+  createdAt     DateTime            @default(now()) @map("created_at")
+
+  tesla         Tesla               @relation(fields: [teslaId], references: [id], onDelete: Cascade)
+  pickupZone    Zone                @relation("PoolAnchorZone", fields: [pickupZoneId], references: [id])
+  members       PoolMember[]
+  statusHistory RideStatusHistory[]
+
+  @@index([teslaId, status])
+  @@map("pools")
+}

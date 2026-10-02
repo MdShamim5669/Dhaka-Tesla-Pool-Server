@@ -1,0 +1,17 @@
+model RideStatusHistory {
+  id            BigInt             @id @default(autoincrement())
+  rideRequestId String             @map("ride_request_id") @db.Uuid
+  poolId        String?            @map("pool_id") @db.Uuid
+  fromStatus    RideRequestStatus  @map("from_status")
+  toStatus      RideRequestStatus  @map("to_status")
+  actorUserId   String             @map("actor_user_id") @db.Uuid
+  reason        String?
+  createdAt     DateTime           @default(now()) @map("created_at")
+
+  rideRequest   RideRequest        @relation(fields: [rideRequestId], references: [id], onDelete: Cascade)
+  pool          Pool?              @relation(fields: [poolId], references: [id])
+  actor         User               @relation(fields: [actorUserId], references: [id])
+
+  @@index([rideRequestId, createdAt])
+  @@map("ride_status_history")
+}

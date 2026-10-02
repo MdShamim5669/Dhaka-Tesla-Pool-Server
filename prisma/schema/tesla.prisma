@@ -1,0 +1,12 @@
+model Tesla {
+  id       String @id @default(uuid()) @db.Uuid
+  driverId String @unique @map("driver_id") @db.Uuid
+  name     String @default("Bullet")
+  plateNo  String @unique @map("plate_no")
+  capacity Int    @default(3) @db.SmallInt
+
+  driver   Driver @relation(fields: [driverId], references: [userId], onDelete: Cascade)
+  pools    Pool[]
+
+  @@map("teslas")
+}

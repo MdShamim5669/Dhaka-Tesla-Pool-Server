@@ -1,0 +1,30 @@
+model RideRequest {
+  id                 String              @id @default(uuid()) @db.Uuid
+  passengerId        String              @map("passenger_id") @db.Uuid
+  pickupZoneId       Int                 @map("pickup_zone_id") @db.SmallInt
+  destZoneId         Int                 @map("dest_zone_id") @db.SmallInt
+  seats              Int                 @db.SmallInt
+  status             RideRequestStatus   @default(REQUESTED)
+  distanceM          Int                 @map("distance_m")
+  estimatedFarePaisa Int                 @map("estimated_fare_paisa")
+  finalFarePaisa     Int?                @map("final_fare_paisa")
+  fareBreakdown      Json?               @map("fare_breakdown")
+  paymentMethod      PaymentMethod       @default(CASH) @map("payment_method")
+  idempotencyKey     String?             @map("idempotency_key")
+  cancelledBy        String?             @map("cancelled_by")
+  cancelReason       String?             @map("cancel_reason")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+
+  passenger          User                @relation(fields: [passengerId], references: [id], onDelete: Cascade)
+  pickupZone         Zone                @relation("PickupZone", fields: [pickupZoneId], references: [id])
+  destZone           Zone                @relation("DestZone", fields: [destZoneId], references: [id])
+  poolMember         PoolMember?
+  statusHistory      RideStatusHistory[]
+  payment            Payment?
+
+  @@unique([passengerId, idempotencyKey])
+  @@index([passengerId, createdAt(sort: Desc)])
+  @@index([status, pickupZoneId])
+  @@map("ride_requests")
+}
