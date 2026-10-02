@@ -2,7 +2,6 @@ import app from './app.js';
 import { env } from './config/env.js';
 import { logger } from './utils/logger.js';
 import { initCronJobs } from './cron/index.js';
-import { connectRedis } from './shared/redis.js';
 
 const PORT = env.PORT || 5000;
 
@@ -12,9 +11,6 @@ const server = app.listen(PORT, async () => {
 
   // Initialize background scheduled tasks
   initCronJobs();
-
-  // Connect to Redis if configured
-  await connectRedis();
 });
 
 server.on('error', (err: NodeJS.ErrnoException) => {
